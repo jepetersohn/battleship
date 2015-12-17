@@ -8,8 +8,8 @@ class Game
   STATES = %w(initialized ready error terminated gameover)
   GRID_SIZE = 10
   HIT_CHAR = 'X'
-  MISS_CHAR = '_'
-  NO_SHOT_CHAR = '.'  
+  MISS_CHAR = '-'
+  NO_SHOT_CHAR = '·'  
 
   SHIPS_DEFS = [
     { size: 4, type: 'Battleship'},

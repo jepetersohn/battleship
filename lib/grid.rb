@@ -4,7 +4,6 @@ class Grid
   AXE_LETTERS = %w( A B C D E F G H I J )
   AXE_DIGGITS = %w( 1 2 3 4 5 6 7 8 9 10 )
   HIT_CHAR = 'X'
-  NO_SHOT_CHAR = '.'
   MISS_CHAR = '-'
 
 
