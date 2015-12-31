@@ -5,7 +5,7 @@ describe Ship do
   let(:matrix_size) { 10 }
   let(:sample_matrix) {  Array.new(10){ Array.new(matrix_size, false) }}
   let(:ship) { Ship.new(sample_matrix, { size: 3, type: "Allah Akbar" }) }
-
+  
   it "is valid" do
     expect(ship).to be_kind_of(Ship)
   end

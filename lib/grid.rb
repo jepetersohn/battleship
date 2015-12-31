@@ -26,8 +26,9 @@ class Grid
     end
   end
 
+  # separate presentation layer
+
   def self.row(txt)
-    return nil if ENV['RACK_ENV'] == 'test'
     puts txt if txt
   end
 
@@ -45,9 +46,8 @@ class Grid
   end
 
   def print_header
-    return nil if ENV['RACK_ENV'] == 'test'
-    puts "=" * AXE_DIGGITS.size*3
-    puts status_line
-    puts "  #{AXE_DIGGITS.join(' ')}"
+    Grid.row("=" * AXE_DIGGITS.size*3)
+    Grid.row(status_line)
+    Grid.row("  #{AXE_DIGGITS.join(' ')}")
   end
 end

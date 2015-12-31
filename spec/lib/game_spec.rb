@@ -4,6 +4,8 @@ require "game"
 describe Game do
   let(:game) { Game.new }
 
+  before(:each) { allow(Grid).to receive(:row) }
+
   it "has array of ships" do
     expect(Game::SHIPS_DEFS).to be_kind_of(Array)
     expect(Game::SHIPS_DEFS).to_not be_empty    

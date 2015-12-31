@@ -19,7 +19,7 @@ class Game
 
   STATES.each { |state| define_method("#{state}?") { @state==state } }
 
-  def initialize(options = {})
+  def initialize
     @state = 'initialized'
     @command_line = nil
     @shots = []

@@ -5,6 +5,8 @@ require "ship"
 describe Grid do
   let(:grid) { Grid.new.build(Array.new) }
 
+  before(:each) { allow(Grid).to receive(:row) }
+
   it "is valid" do
     expect(grid).to be_kind_of(Grid)
   end
@@ -39,5 +41,10 @@ describe Grid do
     grid = Grid.new().build(matrix)
     grid.instance_variable_set("@fleet",fleet)
     expect(grid.send(:setup_with_fleet)[0][2]).to eql('X')
+  end
+
+  it '#print_header' do
+    expect(Grid).to receive(:row).exactly(3).times
+    grid.send(:print_header)
   end
 end

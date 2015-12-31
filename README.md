@@ -15,7 +15,7 @@ The Battleship is an application which implements [Battleship (game)](https://en
    ruby lib/console.rb
    ```
 
-*  The ships cannot overlap (i.e., only one ship can occupy any given square in the grid). This is variant when ships can tauch only diagonal.
+* The ships cannot overlap (i.e., only one ship can occupy any given square in the grid). This is game variant when ships can tauch only diagonal.
 
   bad
 
@@ -38,6 +38,8 @@ The Battleship is an application which implements [Battleship (game)](https://en
       .....XXX..
       ..........
 
+* Application allow a single human player to play a one-sided game of battleships against the computer.
+
 ## List of available commands
 
 * D - debug mode
@@ -46,9 +48,9 @@ The Battleship is an application which implements [Battleship (game)](https://en
 
 * Q - quit
 
-## Specs
+## Tests
 
-Test coverage can be observed in the badge on the top of this file. If I find more time then I will try to improve it.
+Test coverage can be observed in the badge on the top of this file.
 
 ## End of the game
 
