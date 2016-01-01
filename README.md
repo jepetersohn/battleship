@@ -40,6 +40,8 @@ The Battleship is an application which implements [Battleship (game)](https://en
 
 * Application allow a single human player to play a one-sided game of battleships against the computer.
 
+* If computer's ship is sinking then message like 'You sank my Aircraft carrier' arise.
+
 ## List of available commands
 
 * D - debug mode

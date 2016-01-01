@@ -33,7 +33,7 @@ describe Game do
     end
 
     it "inits shots counter" do
-      expect(game.shots).to be_kind_of(Array)
+      expect(game.instance_variable_get("@shots")).to be_kind_of(Array)
     end
 
     it "inits fleet" do
@@ -184,7 +184,7 @@ describe Game do
 
     describe '#convert' do
       it "converts from A5 to coordinates" do
-        game.command_line = "B5"
+        game.instance_variable_set("@command_line","B5")
         expect(game.send(:convert)).to eql([1, 4])
       end
     end

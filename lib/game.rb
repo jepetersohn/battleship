@@ -2,14 +2,13 @@ require_relative '../lib/grid.rb'
 require_relative '../lib/ship.rb'
 
 class Game
-  attr_accessor :command_line
-  attr_reader :state, :shots
+  attr_reader :state
 
   STATES = %w(initialized ready error terminated gameover)
   GRID_SIZE = 10
   HIT_CHAR = 'X'
   MISS_CHAR = '-'
-  NO_SHOT_CHAR = '·'  
+  NO_SHOT_CHAR = '·'
 
   SHIPS_DEFS = [
     { size: 4, type: 'Battleship'},
@@ -105,14 +104,15 @@ class Game
       @fleet.each do |ship|
         if ship.location.include? xy
           @matrix_oponent[xy[0]][xy[1]] = HIT_CHAR
+
           @hits_counter -= 1
           Grid.row("You sank my #{ ship.type }!") if (ship.location - @shots).empty? 
           @state = 'gameover' if game_over?
+
           return
-        else
-          @matrix_oponent[xy[0]][xy[1]] = MISS_CHAR
         end
       end
+      @matrix_oponent[xy[0]][xy[1]] = MISS_CHAR
     end
   end
 
