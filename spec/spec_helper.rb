@@ -1,5 +1,5 @@
-ENV['CODECLIMATE_REPO_TOKEN']="da2d7d9251de33156d3d729804eabd1895290b2092d06145a3b733b0ce1ef2a4"
-require "codeclimate-test-reporter"
+ENV['CODECLIMATE_REPO_TOKEN'] = 'da2d7d9251de33156d3d729804eabd1895290b2092d06145a3b733b0ce1ef2a4'
+require 'codeclimate-test-reporter'
 CodeClimate::TestReporter.start
 
 ENV['RACK_ENV'] = 'test'
