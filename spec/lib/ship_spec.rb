@@ -31,7 +31,7 @@ describe Ship do
       expect(ship).to respond_to(:build)
     end
 
-    it 'makes ship array' do
+    it 'makes ship an Array' do
       expect(ship.build.location).to be_kind_of(Array)
     end
 

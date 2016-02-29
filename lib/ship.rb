@@ -6,31 +6,31 @@ class Ship
     @xsize    = options[:size]
     @type     = options[:type]
     @matrix   = matrix
-    @location = []
+    @location = Array.new
   end
 
   def build
     begin
       destroy
-      ship_len = @xsize
-      mask = []
+      ship_length = @xsize
+      mask = Array.new
       # random start point
       while mask.empty?
-        xy = [rand(@matrix.size), rand(@matrix.size)]
-        mask = take_mask(xy)
+        xy = rand(@matrix.size), rand(@matrix.size)
+        mask = take_mask xy
       end
       save(xy)
-      ship_len -= 1
-      while !ship_len.zero? && !mask.size.zero?
+      ship_length -= 1
+      until ship_length.zero? || mask.size.zero?
         # random next direction
         xy = mask.delete_at(rand(mask.size))
         neighberhood = take_mask(xy, @location.last)
         next if neighberhood.empty?
-        save(xy)
+        save xy
         mask = neighberhood
-        ship_len -= 1
+        ship_length -= 1
       end
-    end until ship_len.zero?
+    end until ship_length.zero?
     self
   end
 
@@ -38,36 +38,34 @@ class Ship
 
   def destroy
     @location.each { |xy| @matrix[xy[0]][xy[1]] = ' ' }
-    @location = []
+    @location = Array.new
   end
 
   def save(xy)
-    @location.push(xy)
+    @location.push xy
     @matrix[xy[0]][xy[1]] = true
   end
 
   # returns valid surrounding mask
   def take_mask(xy, exception = nil)
-    return [] unless xy
-    x = xy[0]
+    return Array.new unless xy
+    x = xy.first
     y = xy[1]
-    return [] if @matrix[x][y] == true
+    return Array.new if @matrix[x][y]
 
-    mask = []
+    mask = Array.new
 
     mask[0] = [x - 1, y    ] if (x - 1) >= 0
     mask[1] = [x    , y - 1] if (y - 1) >= 0
     mask[2] = [x    , y + 1] if (y + 1) < @matrix.size
     mask[3] = [x + 1, y    ] if (x + 1) < @matrix.size
-    clean(mask, exception)
+    clean mask, exception
   end
 
   def clean(mask, exception)
-    mask = mask.select { |item| item && item != exception }
+    mask.reject! { |item| item || item == exception }
 
-    mask.each do |item|
-      return [] if @matrix[item[0]][item[1]] == true
-    end
+    mask.each {|item| return Array.new if @matrix[item[0]][item[1]]}
     mask
   end
 end
