@@ -1,6 +1,7 @@
 require_relative '../lib/grid.rb'
 require_relative '../lib/ship.rb'
 
+# Game class. Main program class.
 class Game
   attr_reader :state
 

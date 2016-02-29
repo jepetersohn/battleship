@@ -1,3 +1,4 @@
+# Ship class
 class Ship
   attr_reader :location, :type, :xsize
 
@@ -14,23 +15,22 @@ class Ship
       ship_len = @xsize
       mask = []
       # random start point
-      begin
+      while mask.empty?
         xy = [rand(@matrix.size), rand(@matrix.size)]
         mask = take_mask(xy)
-      end while mask.empty?
+      end
       save(xy)
       ship_len -= 1
-      while (!ship_len.zero? && !mask.size.zero?)
+      while !ship_len.zero? && !mask.size.zero?
         # random next direction
         xy = mask.delete_at(rand(mask.size))
         neighberhood = take_mask(xy, @location.last)
-        unless neighberhood.empty?
-          save(xy)
-          mask = neighberhood
-          ship_len -= 1
-        end
+        next if neighberhood.empty?
+        save(xy)
+        mask = neighberhood
+        ship_len -= 1
       end
-    end while !ship_len.zero?
+    end until ship_len.zero?
     self
   end
 
@@ -51,13 +51,13 @@ class Ship
     return [] unless xy
     x = xy[0]
     y = xy[1]
-    return [] if @matrix[x][y] === true
+    return [] if @matrix[x][y] == true
 
     mask = []
 
     mask[0] = [x - 1, y    ] if (x - 1) >= 0
-    mask[1] = [x,     y - 1] if (y - 1) >= 0
-    mask[2] = [x,     y + 1] if (y + 1) < @matrix.size
+    mask[1] = [x    , y - 1] if (y - 1) >= 0
+    mask[2] = [x    , y + 1] if (y + 1) < @matrix.size
     mask[3] = [x + 1, y    ] if (x + 1) < @matrix.size
     clean(mask, exception)
   end

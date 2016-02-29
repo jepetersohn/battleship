@@ -1,3 +1,4 @@
+# Grid class
 class Grid
   attr_accessor :status_line
 

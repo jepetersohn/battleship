@@ -52,7 +52,11 @@ The Battleship is an application which implements [Battleship (game)](https://en
 
 ## Tests
 
-Test coverage can be observed in the badge on the top of this file.
+Test coverage can be observed in the badge on the top of this file. You can inspect them running
+
+```
+bundle exec rspec
+```
 
 ## End of the game
 

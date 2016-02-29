@@ -3,9 +3,9 @@ require 'ship'
 
 describe Ship do
   let(:matrix_size) { 10 }
-  let(:sample_matrix) {  Array.new(10){ Array.new(matrix_size, false) }}
-  let(:ship) { Ship.new(sample_matrix, { size: 3, type: 'Allah Akbar' }) }
-  
+  let(:sample_matrix) {  Array.new(10) { Array.new(matrix_size, false) } }
+  let(:ship) { Ship.new(sample_matrix, size: 3, type: 'Allah Akbar') }
+
   it 'is valid' do
     expect(ship).to be_kind_of(Ship)
   end
@@ -30,7 +30,7 @@ describe Ship do
     it 'is valid' do
       expect(ship).to respond_to(:build)
     end
-    
+
     it 'makes ship array' do
       expect(ship.build.location).to be_kind_of(Array)
     end
@@ -40,7 +40,7 @@ describe Ship do
     end
 
     it 'makes another ship' do
-      other = Ship.new(sample_matrix, { size: 5 }).build
+      other = Ship.new(sample_matrix, size: 5).build
       expect(other.location.size).to eql(5)
     end
 
@@ -57,7 +57,9 @@ describe Ship do
   describe '#destroy' do
     it 'changes @location to empty' do
       ship.build
-      expect{ ship.send(:destroy) }.to change{ ship.location.size }.from(3).to(0)
+      expect { ship.send(:destroy) }.to change {
+        ship.location.size
+      }.from(3).to(0)
     end
   end
 
@@ -65,13 +67,13 @@ describe Ship do
     subject { ship.send(:save, [2, 3]) }
 
     it 'push coordinates into location' do
-      expect{ subject }.to change{
+      expect { subject }.to change {
         ship.location
-      }.to([[2 ,3]])
+      }.to([[2, 3]])
     end
 
     it 'set matrix with ship coordinates' do
-      expect{ subject }.to change{
+      expect { subject }.to change {
         ship.instance_variable_get(:@matrix)[2][3]
       }.from(false).to(true)
     end
@@ -89,7 +91,8 @@ describe Ship do
     end
 
     it 'scenario 1 (normal)' do
-      expect(ship.send(:take_mask, [1, 1])).to eql([[0, 1], [1, 0], [1, 2], [2, 1]])
+      expect(ship.send(:take_mask, [1, 1]))
+        .to eql [[0, 1], [1, 0], [1, 2], [2, 1]]
     end
 
     it 'scenario 1 (corner A)' do
@@ -97,7 +100,8 @@ describe Ship do
     end
 
     it 'scenario 1 (corner B)' do
-      expect(ship.send(:take_mask, [matrix_size-1, matrix_size-1])).to eql([[8, 9], [9, 8]])
+      expect(ship.send(:take_mask, [matrix_size - 1, matrix_size - 1]))
+        .to eql [[8, 9], [9, 8]]
     end
 
     it 'calls #clean' do

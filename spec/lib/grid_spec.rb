@@ -1,3 +1,4 @@
+# Grid class
 require 'spec_helper'
 require 'grid'
 require 'ship'

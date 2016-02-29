@@ -20,7 +20,7 @@ describe Game do
   end
 
   describe '#initialize' do
-    before(:each) do 
+    before(:each) do
       allow_any_instance_of(described_class).to receive(:play)
     end
 
@@ -76,7 +76,8 @@ describe Game do
       end
 
       it 'with correct size' do
-        expect(game.instance_variable_get(:@fleet).size).to eql(Game::SHIPS_DEFS.size)
+        expect(game.instance_variable_get(:@fleet).size)
+          .to eql(Game::SHIPS_DEFS.size)
       end
 
       it 'with correct type' do
@@ -91,13 +92,15 @@ describe Game do
 
     describe 'with input from console' do
       it "when 'Q'" do
-        game.instance_variable_set('@command_line','Q')
-        expect { game.play }.to change { game.state }.from('ready').to('terminated')
+        game.instance_variable_set('@command_line', 'Q')
+        expect { game.play }.to change {
+          game.state
+        }.from('ready').to('terminated')
       end
 
       it "when 'D'" do
-        game.instance_variable_set('@command_line','D')
-        expect(game).to receive(:show).with( debug: true )
+        game.instance_variable_set('@command_line', 'D')
+        expect(game).to receive(:show).with(debug: true)
         game.play
       end
 
@@ -109,7 +112,10 @@ describe Game do
         end
 
         it "setup grids's status_line" do
-          expect { game.play }.to change { game.instance_variable_get('@grid_oponent').instance_variable_get('@status_line') }.to('Initialized')
+          expect { game.play }.to change {
+            game.instance_variable_get('@grid_oponent')
+              .instance_variable_get('@status_line')
+          }.to('Initialized')
         end
 
         it 'calls #show' do
@@ -118,12 +124,14 @@ describe Game do
         end
 
         it 'changes state' do
-          expect { game.play }.to change { game.state }.from('ready').to('initialized')
+          expect { game.play }.to change {
+            game.state
+          }.from('ready').to('initialized')
         end
       end
 
       describe "when 'A5'" do
-        before(:each) { game.instance_variable_set('@command_line','A5') }
+        before(:each) { game.instance_variable_set('@command_line', 'A5') }
 
         it 'calls #shoot' do
           expect(game).to receive(:shoot)
@@ -131,7 +139,10 @@ describe Game do
         end
 
         it 'changes status line' do
-          expect { game.play }.to change { game.instance_variable_get('@grid_oponent').instance_variable_get('@status_line') }.from('Error: Incorrect input').to('[ready] Your input: A5')
+          expect { game.play }.to change {
+            game.instance_variable_get('@grid_oponent')
+              .instance_variable_get('@status_line')
+          }.from('Error: Incorrect input').to('[ready] Your input: A5 (1)')
         end
 
         it 'calls #show' do
@@ -154,7 +165,10 @@ describe Game do
 
     describe 'in debug mode' do
       it 'changes status_line' do
-        expect { game.show(debug: true) }.to change { game.instance_variable_get('@grid').instance_variable_get('@status_line') }.from(nil).to('DEBUG MODE')
+        expect { game.show(debug: true) }.to change {
+          game.instance_variable_get('@grid')
+            .instance_variable_get('@status_line')
+        }.from(nil).to('DEBUG MODE')
       end
     end
   end
@@ -175,8 +189,8 @@ describe Game do
 
     describe '#clear_error' do
       it 'cleans error status' do
-        game.instance_variable_set('@state','error')
-        expect {game.send(:clear_error)}.to change {
+        game.instance_variable_set('@state', 'error')
+        expect { game.send(:clear_error) }.to change {
           game.instance_variable_get(:@state)
         }.from('error').to('ready')
       end
@@ -184,7 +198,7 @@ describe Game do
 
     describe '#convert' do
       it 'converts from A5 to coordinates' do
-        game.instance_variable_set('@command_line','B5')
+        game.instance_variable_set('@command_line', 'B5')
         expect(game.send(:convert)).to eql([1, 4])
       end
     end
@@ -196,8 +210,9 @@ describe Game do
       end
 
       it 'when gameover returns text' do
-        game.instance_variable_set('@state','gameover')
-        expect(game.send(:report)).to eql 'Well done! You completed the game in 0 shots'
+        game.instance_variable_set('@state', 'gameover')
+        expect(game.send(:report))
+          .to eql 'Well done! You completed the game in 0 shots'
       end
     end
 
@@ -211,8 +226,8 @@ describe Game do
       end
 
       it 'sets game command line' do
-        expect { game << 'BLE' }.to change { 
-          game.instance_variable_get(:@command_line) 
+        expect { game << 'BLE' }.to change {
+          game.instance_variable_get(:@command_line)
         }.from(nil).to('BLE')
       end
     end
