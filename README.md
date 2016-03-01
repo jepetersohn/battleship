@@ -1,5 +1,6 @@
 # Ruby Implementation of Battleship game
 
+[![Build Status](https://travis-ci.org/szymon33/battleship.svg?branch=master)](https://travis-ci.org/szymon33/battleship)
 [![Code Climate](https://codeclimate.com/github/szymon33/battleship/badges/gpa.svg)](https://codeclimate.com/github/szymon33/battleship)
 [![Test Coverage](https://codeclimate.com/github/szymon33/battleship/badges/coverage.svg)](https://codeclimate.com/github/szymon33/battleship/coverage)
 
