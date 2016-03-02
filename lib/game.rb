@@ -5,11 +5,11 @@ require_relative '../lib/ship.rb'
 class Game
   attr_reader :state
 
-  STATES = %i(initialized ready error terminated game_over)
-  GRID_SIZE = 10
-  HIT_CHAR = 'X'
-  MISS_CHAR = '-'
-  NO_SHOT_CHAR = '·'
+  STATES = %i(initialized ready error terminated game_over).freeze
+  GRID_SIZE = 10.freeze
+  HIT_CHAR = 'X'.freeze
+  MISS_CHAR = '-'.freeze
+  NO_SHOT_CHAR = '·'.freeze
 
   SHIPS_DEFS = [
     { size: 4, type: 'Battleship' },
@@ -22,8 +22,8 @@ class Game
   def initialize
     @state = :initialized
     @command_line = nil
-    @shots = []
-    @fleet = []
+    @shots = Array.new
+    @fleet = Array.new
     play
   end
 
