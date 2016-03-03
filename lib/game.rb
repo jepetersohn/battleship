@@ -100,21 +100,18 @@ class Game
   end
 
   def shoot
-    if xy = convert
-      @shots.push(xy)
-      @fleet.each do |ship|
-        if ship.location.include? xy
-          @matrix_opponent[xy[0]][xy[1]] = HIT_CHAR
-
-          @hits_counter -= 1
-          Grid.row("You sank my #{ship.type}!") if (ship.location - @shots).empty?
-          @state = :game_over if fleet_detroyed?
-
-          return
-        end
+    return unless xy = convert
+    @shots.push(xy)
+    @fleet.each do |ship|
+      if ship.location.include? xy
+        @matrix_opponent[xy[0]][xy[1]] = HIT_CHAR
+        @hits_counter -= 1
+        Grid.row("You sank my #{ship.type}!") if (ship.location - @shots).empty?
+        @state = :game_over if fleet_detroyed?
+        return
       end
-      @matrix_opponent[xy[0]][xy[1]] = MISS_CHAR
     end
+    @matrix_opponent[xy[0]][xy[1]] = MISS_CHAR
   end
 
   def fleet_detroyed?
