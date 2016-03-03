@@ -111,7 +111,7 @@ class Game
         return
       end
     end
-    @matrix_opponent[xy.first[xy[1]]] = MISS_CHAR
+    @matrix_opponent[xy[0][xy[1]]] = MISS_CHAR
   end
 
   def fleet_detroyed?
