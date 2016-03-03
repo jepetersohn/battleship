@@ -62,7 +62,7 @@ class Game
         show
         clear_error
       end
-    end while not(game_over? || terminated? || initialized? || ENV['RACK_ENV'] == 'test')
+    end until game_over? || terminated? || initialized? || ENV['RACK_ENV'] == 'test'
   end
 
   def show(options = {})
