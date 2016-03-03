@@ -70,3 +70,11 @@ bundle exec rspec
 ![Screentshot](screenshot1.png)
 
 ![Screentshot](screenshot2.png)
+
+## Contributors
+
+Contributors are welcome but please note that 
+
+* we follow the [community-driven Ruby coding style guide](https://github.com/bbatsov/ruby-style-guide) here.
+
+* tests (rspec) should work when you are ready with your PR :smile:
