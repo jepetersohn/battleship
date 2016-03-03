@@ -102,13 +102,13 @@ describe Game do
       end
     end
 
-    it 'calls controll_loop' do
-      expect_any_instance_of(described_class).to receive(:controll_loop)
+    it 'calls control_loop' do
+      expect_any_instance_of(described_class).to receive(:control_loop)
       Game.new
     end
   end
 
-  describe '#controll_loop' do
+  describe '#control_loop' do
     it 'calls #console' do
       expect(game).to receive(:console)
       game.play
