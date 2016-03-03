@@ -6,3 +6,10 @@ script:
 - bundle exec rspec spec -f doc
 matrix:
   fast_finish: true
+notifications:
+  email:
+    recipients:
+      - miedziejko@gmail.com
+      - zrp200@gmail.com
+    on_success: never
+    on_failure: always
