@@ -11,16 +11,20 @@ class Ship
 
   def build
     begin
-      destroy
       ship_length = @xsize
       mask = Array.new
+
+      destroy
+
       # random start point
       while mask.empty?
         xy = rand(@matrix.size), rand(@matrix.size)
         mask = take_mask xy
       end
-      save(xy)
+      save xy
       ship_length -= 1
+
+      # continiue build
       until ship_length.zero? || mask.size.zero?
         # random next direction
         xy = mask.delete_at(rand(mask.size))
@@ -51,7 +55,7 @@ class Ship
     return Array.new unless xy
     x = xy.first
     y = xy[1]
-    return Array.new if @matrix[x][y]
+    return Array.new if @matrix[x][y] == true
 
     mask = Array.new
 
@@ -63,9 +67,9 @@ class Ship
   end
 
   def clean(mask, exception)
-    mask.reject! { |item| item || item == exception }
+    mask.select! { |item| item && item != exception }
 
-    mask.each { |item| return Array.new if @matrix[item[0]][item[1]] }
+    mask.each { |item| return Array.new if @matrix[item[0]][item[1]] == true }
     mask
   end
 end

@@ -4,7 +4,7 @@ require 'grid'
 require 'ship'
 
 describe Grid do
-  let(:grid) { Grid.new.build([]) }
+  let(:grid) { Grid.new([]) }
 
   before(:each) { allow(Grid).to receive(:row) }
 
@@ -31,10 +31,10 @@ describe Grid do
   it '#setup_with_fleet' do
     matrix = Array.new(4) { Array.new(4, ' ') }
 
-    ship1 = Ship.new(matrix, size: 1).build
+    ship1 = Ship.new(matrix, size: 1)
     ship1.instance_variable_set('@location', [[0, 2]])
 
-    fleet = ship1, Ship.new(matrix, size: 2).build
+    fleet = ship1, Ship.new(matrix, size: 2)
 
     grid = Grid.new matrix
     grid.instance_variable_set('@fleet', fleet)

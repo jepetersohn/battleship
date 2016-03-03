@@ -52,6 +52,10 @@ describe Ship do
       expect_any_instance_of(described_class).to receive(:destroy)
       ship.build
     end
+
+    it 'returns ship' do
+      expect(ship.build).to be_a Ship
+    end
   end
 
   describe '#destroy' do

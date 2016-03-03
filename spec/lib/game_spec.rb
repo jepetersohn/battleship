@@ -47,44 +47,68 @@ describe Game do
     end
   end
 
+  describe 'status helpers' do
+    before(:each) do
+      allow_any_instance_of(described_class).to receive(:play)
+    end
+
+    it 'is valid' do
+      described_class::STATES.each do |state|
+        expect(game).to respond_to("#{state}?")
+      end
+    end
+  end
+
   describe '#play' do
     before(:each)  do
       # escape from endless loop
       allow(game).to receive(:initialized?).and_return(false)
     end
 
-    it 'is valid' do
-      expect(game).to respond_to(:play)
-    end
-
     it 'sets ready state' do
       expect(game).to be_ready
     end
 
-    it 'initializes @matrix as an Array' do
-      expect(game.instance_variable_get(:@matrix)).to be_kind_of(Array)
+    it 'initializes your matrix' do
+      expect(game.instance_variable_get(:@matrix)).to be_a Array
     end
 
-    it 'initializes @matrix_oponent as an Array' do
-      expect(game.instance_variable_get(:@matrix_opponent)).to be_kind_of(Array)
+    it "initializes opponent's matrix" do
+      expect(game.instance_variable_get(:@matrix_opponent)).to be_a Array
     end
 
-    describe 'makes fleet' do
-      it 'calls #add_fleet' do
-        expect(game).to receive(:add_fleet)
+    it "initializes opponent's grid" do
+      expect(game.instance_variable_get(:@grid_opponent)).to be_a Grid
+    end
+
+    describe 'with fleet' do
+      it 'calls #create_fleet!' do
+        expect(game).to receive(:create_fleet!)
         game.play
       end
 
-      it 'with correct size' do
+      it 'correct size' do
         expect(game.instance_variable_get(:@fleet).size)
-          .to eql(Game::SHIPS_DEFS.size)
+          .to eql(described_class::SHIPS_DEFS.size)
       end
 
-      it 'with correct type' do
+      it 'correct type' do
         expect(game.instance_variable_get(:@fleet).first).to be_kind_of(Ship)
+      end
+
+      it 'sets game hits counter' do
+        expect(game.instance_variable_get(:@hits_counter))
+          .to eql described_class::SHIPS_DEFS.inject(0) { |a, e| a + e[:size] }
       end
     end
 
+    it 'calls controll_loop' do
+      expect_any_instance_of(described_class).to receive(:controll_loop)
+      Game.new
+    end
+  end
+
+  describe '#controll_loop' do
     it 'calls #console' do
       expect(game).to receive(:console)
       game.play
@@ -111,6 +135,12 @@ describe Game do
           allow(game).to receive(:initialized?).and_return(false)
         end
 
+        it 'changes state' do
+          expect { game.play }.to change {
+            game.state
+          }.from(:ready).to(:initialized)
+        end
+
         it "setups grids's status_line" do
           expect { game.play }.to change {
             game.instance_variable_get('@grid_opponent')
@@ -121,12 +151,6 @@ describe Game do
         it 'calls #show' do
           expect(game).to receive(:show)
           game.play
-        end
-
-        it 'changes state' do
-          expect { game.play }.to change {
-            game.state
-          }.from(:ready).to(:initialized)
         end
       end
 
@@ -173,14 +197,14 @@ describe Game do
     end
   end
 
-  describe '#game_over?' do
+  describe '#fleet_detroyed?' do
     it 'returns true when hits_counter is zero' do
       game.instance_variable_set('@hits_counter', 0)
-      expect(game.send(:game_over?)).to be_truthy
+      expect(game.send(:fleet_detroyed?)).to be_truthy
     end
 
     it 'returns false when hits_counter is not zero' do
-      expect(game.send(:game_over?)).to be_falsy
+      expect(game.send(:fleet_detroyed?)).to be_falsy
     end
   end
 

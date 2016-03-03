@@ -29,41 +29,44 @@ class Game
 
   def play
     begin
-      @hits_counter = 0
       @matrix = Array.new(GRID_SIZE) { Array.new(GRID_SIZE, ' ') }
       @matrix_opponent = Array.new(GRID_SIZE) { Array.new(GRID_SIZE, NO_SHOT_CHAR) }
       @grid_opponent = Grid.new @matrix_opponent
-
+      @hits_counter = 0
       @state = :ready
-      add_fleet
-      begin
-        console
-        case @command_line
-        when 'D'
-          @grid_opponent.status_line = String.new
-          show(debug: true)
-        when 'Q' then @state = :terminated
-        when 'I'
-          @state = :initialized
-          @grid_opponent.status_line = 'Initialized'
-          show
-        when /^[A-J]([1-9]|10)$/
-          shoot
-          @grid_opponent.status_line = "[#{@state}] Your input: #{@command_line} (#{@shots.size})"
-          show
-        else
-          @grid_opponent.status_line = 'Error: Incorrect input'
-          show
-          clear_error
-        end
-      end until game_over? && terminated? && initialized? && ENV['RACK_ENV'] == 'test'
+      create_fleet!
+      controll_loop
     end while initialized?
     report
     self
   end
 
+  def controll_loop
+    begin
+      console
+      case @command_line
+      when 'D'
+        @grid_opponent.status_line = String.new
+        show(debug: true)
+      when 'Q' then @state = :terminated
+      when 'I'
+        @state = :initialized
+        @grid_opponent.status_line = 'Initialized'
+        show
+      when /^[A-J]([1-9]|10)$/
+        shoot
+        @grid_opponent.status_line = "[#{@state}] Your input: #{@command_line} (#{@shots.size})"
+        show
+      else
+        @grid_opponent.status_line = 'Error: Incorrect input'
+        show
+        clear_error
+      end
+    end while not(game_over? || terminated? || initialized? || ENV['RACK_ENV'] == 'test')
+  end
+
   def show(options = {})
-    @grid_opponent.new(@matrix_opponent).show
+    @grid_opponent.show
 
     if options[:debug]
       @grid = Grid.new(@matrix, @fleet)
@@ -80,7 +83,7 @@ class Game
 
   private
 
-  def add_fleet
+  def create_fleet!
     @fleet = Array.new
     SHIPS_DEFS.each do |ship_definition|
       ship = Ship.new(@matrix, ship_definition).build
@@ -97,15 +100,15 @@ class Game
   end
 
   def shoot
-    if xy == convert
+    if xy = convert
       @shots.push(xy)
       @fleet.each do |ship|
         if ship.location.include? xy
-          @matrix_oponent[xy[0]][xy[1]] = HIT_CHAR
+          @matrix_opponent[xy[0]][xy[1]] = HIT_CHAR
 
           @hits_counter -= 1
           Grid.row("You sank my #{ship.type}!") if (ship.location - @shots).empty?
-          @state = :game_over if game_over?
+          @state = :game_over if fleet_detroyed?
 
           return
         end
@@ -114,12 +117,12 @@ class Game
     end
   end
 
-  def game_over?
+  def fleet_detroyed?
     @hits_counter.zero?
   end
 
   def convert
-    x = @command_line.first
+    x = @command_line[0]
     y = @command_line[1..-1]
     [x.ord - 65, y.to_i - 1]
   end
