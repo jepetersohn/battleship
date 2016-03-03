@@ -1,4 +1,4 @@
-require_relative '../lib/grid.rb'
+﻿require_relative '../lib/grid.rb'
 require_relative '../lib/ship.rb'
 
 # Game class. Main program class.
@@ -119,7 +119,7 @@ class Game
   end
 
   def convert
-    x = @command_line.first
+    x = @command_line[0]
     y = @command_line[1..-1]
     [x.ord - 65, y.to_i - 1]
   end
