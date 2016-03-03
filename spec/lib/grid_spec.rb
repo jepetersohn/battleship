@@ -16,13 +16,10 @@ describe Grid do
     expect(Grid::AXE_LETTERS).to eql(%w(A B C D E F G H I J))
   end
 
-  it 'has diggits array' do
-    expect(Grid::AXE_DIGGITS).to eql(%w(1 2 3 4 5 6 7 8 9 10))
+  it 'has digits array' do
+    expect(Grid::AXE_DIGITS).to eql(%w(1 2 3 4 5 6 7 8 9 10))
   end
 
-  it '#build' do
-    expect(grid).to respond_to(:build)
-  end
   it '#show' do
     expect(grid).to respond_to(:show)
   end
@@ -37,9 +34,9 @@ describe Grid do
     ship1 = Ship.new(matrix, size: 1).build
     ship1.instance_variable_set('@location', [[0, 2]])
 
-    fleet = [ship1, Ship.new(matrix, size: 2).build]
+    fleet = ship1, Ship.new(matrix, size: 2).build
 
-    grid = Grid.new.build(matrix)
+    grid = Grid.new matrix
     grid.instance_variable_set('@fleet', fleet)
     expect(grid.send(:setup_with_fleet)[0][2]).to eql('X')
   end
