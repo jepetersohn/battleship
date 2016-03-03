@@ -1,0 +1,10 @@
+Style/Documentation:
+  Enabled: false
+Style/EmptyLiteral:
+  Enabled: false
+# Metrics/AbcSize:
+#   Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/LineLength:
+  Enabled: false
