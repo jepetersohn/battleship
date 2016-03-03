@@ -100,7 +100,7 @@ class Game
   end
 
   def shoot
-    return unless xy == convert
+    return unless xy = convert
     @shots.push(xy)
     @fleet.each do |ship|
       if ship.location.include? xy
