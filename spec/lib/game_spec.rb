@@ -28,7 +28,7 @@ describe Game do
       expect(game).to be_kind_of(Game)
     end
 
-    it "sets :initialize state" do
+    it 'sets initialize state' do
       expect(game).to be_initialized
     end
 
@@ -57,7 +57,7 @@ describe Game do
       expect(game).to respond_to(:play)
     end
 
-    it "sets :ready state" do
+    it 'sets ready state' do
       expect(game).to be_ready
     end
 

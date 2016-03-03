@@ -2,10 +2,10 @@
 class Grid
   attr_accessor :status_line
 
-  AXE_LETTERS = %w( A B C D E F G H I J )
-  AXE_DIGITS = %w( 1 2 3 4 5 6 7 8 9 10 )
-  HIT_CHAR = 'X'
-  MISS_CHAR = '-'
+  AXE_LETTERS = %w( A B C D E F G H I J ).freeze
+  AXE_DIGITS = %w( 1 2 3 4 5 6 7 8 9 10 ).freeze
+  HIT_CHAR = 'X'.freeze
+  MISS_CHAR = '-'.freeze
 
   def initialize(matrix, fleet = nil)
     @matrix = matrix
@@ -15,7 +15,7 @@ class Grid
   def show
     print_header
     setup_with_fleet if @fleet
-    @matrix.each_with_index {|grow, index| Grid.row("#{AXE_LETTERS[index]} #{grow.join(' ')}")}
+    @matrix.each_with_index { |grow, index| Grid.row("#{AXE_LETTERS[index]} #{grow.join(' ')}") }
   end
 
   # separate presentation layer
@@ -29,7 +29,7 @@ class Grid
   def setup_with_fleet
     if @fleet
       @fleet.each do |ship|
-        ship.location.each {|coordinates| @matrix[coordinates.first][coordinates[1]] = HIT_CHAR}
+        ship.location.each { |coordinates| @matrix[coordinates.first][coordinates[1]] = HIT_CHAR }
       end
     end
     @matrix

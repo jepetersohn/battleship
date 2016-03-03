@@ -1,4 +1,4 @@
-﻿require_relative '../lib/grid.rb'
+require_relative '../lib/grid.rb'
 require_relative '../lib/ship.rb'
 
 # Game class. Main program class.
@@ -6,7 +6,7 @@ class Game
   attr_reader :state
 
   STATES = %i(initialized ready error terminated game_over).freeze
-  GRID_SIZE = 10.freeze
+  GRID_SIZE = 10
   HIT_CHAR = 'X'.freeze
   MISS_CHAR = '-'.freeze
   NO_SHOT_CHAR = '·'.freeze
@@ -86,7 +86,7 @@ class Game
       ship = Ship.new(@matrix, ship_definition).build
       @fleet.push ship
       @hits_counter += ship_definition.fetch(:size) # need for game over check
-      ship.location.each { |coordinates| @matrix[coordinates.first][coordinates[1]] = true}
+      ship.location.each { |coordinates| @matrix[coordinates.first][coordinates[1]] = true }
     end
   end
 
@@ -119,7 +119,8 @@ class Game
   end
 
   def convert
-    x, y = @command_line.first, @command_line[1..-1]
+    x = @command_line.first
+    y = @command_line[1..-1]
     [x.ord - 65, y.to_i - 1]
   end
 

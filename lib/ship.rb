@@ -65,7 +65,7 @@ class Ship
   def clean(mask, exception)
     mask.reject! { |item| item || item == exception }
 
-    mask.each {|item| return Array.new if @matrix[item[0]][item[1]]}
+    mask.each { |item| return Array.new if @matrix[item[0]][item[1]] }
     mask
   end
 end
