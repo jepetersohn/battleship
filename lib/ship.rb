@@ -56,13 +56,11 @@ class Ship
     x = xy.first
     y = xy[1]
     return Array.new if @matrix[x][y] == true
-
     mask = Array.new
-
-    mask[0] = [x - 1, y    ] if (x - 1) >= 0
-    mask[1] = [x    , y - 1] if (y - 1) >= 0
-    mask[2] = [x    , y + 1] if (y + 1) < @matrix.size
-    mask[3] = [x + 1, y    ] if (x + 1) < @matrix.size
+    mask[0] = [x - 1, y] if (x - 1) >= 0
+    mask[1] = [x, y - 1] if (y - 1) >= 0
+    mask[2] = [x, y + 1] if (y + 1) < @matrix.size
+    mask[3] = [x + 1, y] if (x + 1) < @matrix.size
     clean mask, exception
   end
 
