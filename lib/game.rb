@@ -35,13 +35,13 @@ class Game
       @hits_counter = 0
       @state = :ready
       create_fleet!
-      controll_loop
+      control_loop
     end while initialized?
     report
     self
   end
 
-  def controll_loop
+  def control_loop
     begin
       console
       case @command_line
@@ -100,7 +100,7 @@ class Game
   end
 
   def shoot
-    return unless xy = convert
+    return unless xy == convert
     @shots.push(xy)
     @fleet.each do |ship|
       if ship.location.include? xy
@@ -111,7 +111,7 @@ class Game
         return
       end
     end
-    @matrix_opponent[xy[0]][xy[1]] = MISS_CHAR
+    @matrix_opponent[xy.first[xy[1]] = MISS_CHAR
   end
 
   def fleet_detroyed?
@@ -119,7 +119,7 @@ class Game
   end
 
   def convert
-    x = @command_line[0]
+    x = @command_line.first
     y = @command_line[1..-1]
     [x.ord - 65, y.to_i - 1]
   end
