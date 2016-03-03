@@ -89,7 +89,7 @@ class Game
       ship = Ship.new(@matrix, ship_definition).build
       @fleet.push ship
       @hits_counter += ship_definition.fetch(:size) # need for game over check
-      ship.location.each { |coordinates| @matrix[coordinates.first][coordinates[1]] = true }
+      ship.location.each { |coordinates| @matrix[coordinates[0]][coordinates[1]] = true }
     end
   end
 
