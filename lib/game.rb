@@ -1,4 +1,4 @@
-﻿require_relative '../lib/grid.rb'
+require_relative '../lib/grid.rb'
 require_relative '../lib/ship.rb'
 
 # Game class. Main program class.
@@ -58,7 +58,7 @@ class Game
         @grid_opponent.status_line = "[#{@state}] Your input: #{@command_line} (#{@shots.size})"
         show
       else
-        @grid_opponent.status_line = 'Error: Incorrect input'
+        @grid_opponent.status_line = "Error: Incorrect input #{@command_line}"
         show
         clear_error
       end
@@ -101,17 +101,20 @@ class Game
 
   def shoot
     return unless xy = convert
-    @shots.push(xy)
+    @shots.push xy
+    @matrix_opponent[xy[0]][xy[1]] = MISS_CHAR
     @fleet.each do |ship|
       if ship.location.include? xy
         @matrix_opponent[xy[0]][xy[1]] = HIT_CHAR
-        @hits_counter -= 1
-        Grid.row("You sank my #{ship.type}!") if (ship.location - @shots).empty?
-        @state = :game_over if fleet_detroyed?
-        return
+        hit(ship) && break
       end
     end
-    @matrix_opponent[xy[0][xy[1]]] = MISS_CHAR
+  end
+
+  def hit(ship)
+    @hits_counter -= 1
+    Grid.row("You sank my #{ship.type}!") if (ship.location - @shots).empty?
+    @state = :game_over if fleet_detroyed?
   end
 
   def fleet_detroyed?

@@ -158,15 +158,13 @@ describe Game do
         before(:each) { game.instance_variable_set('@command_line', 'A5') }
 
         it 'calls #shoot' do
-          expect(game).to receive(:shoot)
+          expect(game).to receive(:shoot).once
           game.play
         end
 
-        it 'changes status line' do
-          expect { game.play }.to change {
-            game.instance_variable_get('@grid_opponent')
-              .instance_variable_get('@status_line')
-          }.from('Error: Incorrect input').to('[ready] Your input: A5 (1)')
+        it 'it is valid' do
+          expect(Grid).to receive(:row).with('[ready] Your input: A5 (1)')
+          game.play
         end
 
         it 'calls #show' do

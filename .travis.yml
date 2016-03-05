@@ -13,5 +13,3 @@ notifications:
     recipients:
       - miedziejko@gmail.com
       - zrp200@gmail.com
-    on_success: never
-    on_failure: always
