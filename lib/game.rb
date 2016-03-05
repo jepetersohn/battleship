@@ -1,4 +1,4 @@
-require_relative '../lib/grid.rb'
+﻿require_relative '../lib/grid.rb'
 require_relative '../lib/ship.rb'
 
 # Game class. Main program class.
@@ -35,13 +35,13 @@ class Game
       @hits_counter = 0
       @state = :ready
       create_fleet!
-      controll_loop
+      control_loop
     end while initialized?
     report
     self
   end
 
-  def controll_loop
+  def control_loop
     begin
       console
       case @command_line
@@ -89,7 +89,7 @@ class Game
       ship = Ship.new(@matrix, ship_definition).build
       @fleet.push ship
       @hits_counter += ship_definition.fetch(:size) # need for game over check
-      ship.location.each { |coordinates| @matrix[coordinates.first][coordinates[1]] = true }
+      ship.location.each { |coordinates| @matrix[coordinates[0]][coordinates[1]] = true }
     end
   end
 
@@ -111,7 +111,7 @@ class Game
         return
       end
     end
-    @matrix_opponent[xy[0]][xy[1]] = MISS_CHAR
+    @matrix_opponent[xy[0][xy[1]]] = MISS_CHAR
   end
 
   def fleet_detroyed?
