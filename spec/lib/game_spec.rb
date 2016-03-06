@@ -254,4 +254,60 @@ describe Game do
       end
     end
   end
+
+  describe '#shoot' do
+    it 'returns nil when user input is nil' do
+      expect(game.send(:shoot)).to be nil
+    end
+
+    it 'sets shots array' do
+      game.instance_variable_set('@command_line', 'A1')
+      expect { game.play }.to change {
+        game.instance_variable_get('@shots')
+      }.from([]).to([[0, 0]])
+    end
+
+    describe 'when hit' do
+      before(:each) do
+        @target = game.instance_variable_get('@fleet').first.location.first
+        allow_any_instance_of(described_class).to receive(:convert).and_return(@target)
+      end
+
+      it 'sets HIT_CHAR' do
+        expect { game.send(:shoot) }.to change {
+          game.instance_variable_get('@matrix_opponent')[@target[0]][@target[1]]
+        }.to(described_class::HIT_CHAR)
+      end
+
+      it 'calls #hit' do
+        expect_any_instance_of(described_class).to receive(:hit)
+        game.send(:shoot)
+      end
+    end
+
+    it 'when miss sets MISS_CHAR' do
+      target = game.instance_variable_get('@fleet').first.location.pop
+      allow_any_instance_of(described_class).to receive(:convert).and_return(target)
+      expect { game.send(:shoot) }.to change {
+        game.instance_variable_get('@matrix_opponent')[target[0]][target[1]]
+      }.to(described_class::MISS_CHAR)
+    end
+  end
+
+  describe '#hit' do
+    let(:ship) { game.instance_variable_get('@fleet').first }
+
+    it 'decrease hits counter' do
+      expect { game.send(:hit, ship) }.to change {
+        game.instance_variable_get('@hits_counter')
+      }.by(-1)
+    end
+
+    it 'can finish the game' do
+      allow_any_instance_of(Game).to receive(:fleet_detroyed?).and_return(true)
+      expect { game.send(:hit, ship) }.to change {
+        game.state
+      }.from(:ready).to(:game_over)
+    end
+  end
 end

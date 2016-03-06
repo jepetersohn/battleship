@@ -122,6 +122,7 @@ class Game
   end
 
   def convert
+    return unless @command_line
     x = @command_line[0]
     y = @command_line[1..-1]
     [x.ord - 65, y.to_i - 1]
