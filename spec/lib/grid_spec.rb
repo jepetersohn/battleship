@@ -8,9 +8,9 @@ describe Grid do
 
   before(:each) { allow(Grid).to receive(:row) }
 
-  it 'is valid' do
-    expect(grid).to be_kind_of(Grid)
-  end
+  it { respond_to described_class::HIT_CHAR }
+  it { respond_to described_class::MISS_CHAR }
+  it { respond_to described_class::NO_SHOT_CHAR }
 
   it 'has letters array' do
     expect(Grid::AXE_LETTERS).to eql(%w(A B C D E F G H I J))
@@ -18,6 +18,16 @@ describe Grid do
 
   it 'has digits array' do
     expect(Grid::AXE_DIGITS).to eql(%w(1 2 3 4 5 6 7 8 9 10))
+  end
+
+  it { respond_to described_class::SIZE }
+
+  it 'has GRID_SIZE' do
+    expect(described_class::SIZE).to be_kind_of(Integer)
+  end
+
+  it 'is valid' do
+    expect(grid).to be_kind_of(Grid)
   end
 
   it '#show' do

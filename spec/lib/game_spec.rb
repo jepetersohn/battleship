@@ -15,10 +15,6 @@ describe Game do
     expect(Game::STATES).to be_kind_of(Array)
   end
 
-  it 'has GRID_SIZE' do
-    expect(Game::GRID_SIZE).to be_kind_of(Integer)
-  end
-
   describe '#initialize' do
     before(:each) do
       allow_any_instance_of(described_class).to receive(:play)
@@ -276,7 +272,7 @@ describe Game do
       it 'sets HIT_CHAR' do
         expect { game.send(:shoot) }.to change {
           game.instance_variable_get('@matrix_opponent')[@target[0]][@target[1]]
-        }.to(described_class::HIT_CHAR)
+        }.to(Grid::HIT_CHAR)
       end
 
       it 'calls #hit' do
@@ -290,7 +286,7 @@ describe Game do
       allow_any_instance_of(described_class).to receive(:convert).and_return(target)
       expect { game.send(:shoot) }.to change {
         game.instance_variable_get('@matrix_opponent')[target[0]][target[1]]
-      }.to(described_class::MISS_CHAR)
+      }.to(Grid::MISS_CHAR)
     end
   end
 

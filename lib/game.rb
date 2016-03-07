@@ -6,10 +6,6 @@ class Game
   attr_reader :state
 
   STATES = %i(initialized ready error terminated game_over).freeze
-  GRID_SIZE = 10
-  HIT_CHAR = 'X'.freeze
-  MISS_CHAR = '-'.freeze
-  NO_SHOT_CHAR = '·'.freeze
 
   SHIPS_DEFS = [
     { size: 4, type: 'Battleship' },
@@ -29,8 +25,8 @@ class Game
 
   def play
     begin
-      @matrix = Array.new(GRID_SIZE) { Array.new(GRID_SIZE, ' ') }
-      @matrix_opponent = Array.new(GRID_SIZE) { Array.new(GRID_SIZE, NO_SHOT_CHAR) }
+      @matrix = Array.new(Grid::SIZE) { Array.new(Grid::SIZE, ' ') }
+      @matrix_opponent = Array.new(Grid::SIZE) { Array.new(Grid::SIZE, Grid::NO_SHOT_CHAR) }
       @grid_opponent = Grid.new @matrix_opponent
       @hits_counter = 0
       @state = :ready
@@ -102,10 +98,10 @@ class Game
   def shoot
     return unless xy = convert
     @shots.push xy
-    @matrix_opponent[xy[0]][xy[1]] = MISS_CHAR
+    @matrix_opponent[xy[0]][xy[1]] = Grid::MISS_CHAR
     @fleet.each do |ship|
       if ship.location.include? xy
-        @matrix_opponent[xy[0]][xy[1]] = HIT_CHAR
+        @matrix_opponent[xy[0]][xy[1]] = Grid::HIT_CHAR
         hit(ship) && break
       end
     end
