@@ -19,55 +19,47 @@ class Game
     @state = :initialized
     @command_line = nil
     @shots = Array.new
+    @inputs = Array.new
     @fleet = Array.new
     play
   end
 
   def play
-    begin
+    loop do
       @matrix = Array.new(Grid::SIZE) { Array.new(Grid::SIZE, ' ') }
       @matrix_opponent = Array.new(Grid::SIZE) { Array.new(Grid::SIZE, Grid::NO_SHOT_CHAR) }
       @grid_opponent = Grid.new @matrix_opponent
       @hits_counter = 0
-      @state = :ready
-      create_fleet!
-      control_loop
-    end while initialized?
-    report
+      @debug = false
+      create_fleet! && control_loop
+      break if !initialized? || ENV['RACK_ENV'] == 'test'
+    end
     self
   end
 
   def control_loop
-    begin
-      console
+    ready!
+    loop do
+      show
+      @inputs.push console
       case @command_line
-      when 'D'
-        @grid_opponent.status_line = String.new
-        show(debug: true)
-      when 'Q' then @state = :terminated
-      when 'I'
-        @state = :initialized
-        @grid_opponent.status_line = 'Initialized'
-        show
-      when /^[A-J]([1-9]|10)$/
-        shoot
-        @grid_opponent.status_line = "[#{@state}] Your input: #{@command_line} (#{@shots.size})"
-        show
-      else
-        @grid_opponent.status_line = "Error: Incorrect input #{@command_line}"
-        show
-        clear_error
+      when 'D' then @debug = !@debug
+      when 'Q' then terminate!
+      when 'I' then initialize!
+      when /^[A-J]([1-9]|10)$/ then shoot
+      else @grid_opponent.status_line = "Incorrect input #{@command_line}"
       end
-    end until game_over? || terminated? || initialized? || ENV['RACK_ENV'] == 'test'
+      break if game_over? || terminated? || initialized? || ENV['RACK_ENV'] == 'test'
+    end
   end
 
-  def show(options = {})
-    @grid_opponent.show
+  def show
+    @grid_opponent.show(@inputs)
 
-    if options[:debug]
+    if @debug
       @grid = Grid.new(@matrix, @fleet)
       @grid.status_line = 'DEBUG MODE'
-      @grid.show
+      @grid.debug
     end
   end
 
@@ -91,14 +83,22 @@ class Game
 
   def console
     return nil if ENV['RACK_ENV'] == 'test'
-    input = [(print 'Enter coordinates (row, col), e.g. A5 (I - initialize, Q to quit): '), gets.rstrip][1]
-    self << input
+    self << [(print 'Enter coordinates (row, col), e.g. A5 (I - initialize, Q to quit): '), gets.rstrip][1]
   end
 
   def shoot
-    return unless xy = convert
+    return unless xy = convert(@command_line)
+    if @shots.include? xy
+      @grid_opponent.status_line = 'You repeat yourself'
+      return
+    end
     @shots.push xy
+    mark_shoot xy
+  end
+
+  def mark_shoot(xy)
     @matrix_opponent[xy[0]][xy[1]] = Grid::MISS_CHAR
+    @grid_opponent.status_line = 'Sorry, you missed'
     @fleet.each do |ship|
       if ship.location.include? xy
         @matrix_opponent[xy[0]][xy[1]] = Grid::HIT_CHAR
@@ -109,32 +109,48 @@ class Game
 
   def hit(ship)
     @hits_counter -= 1
-    Grid.row("You sank my #{ship.type}!") if (ship.location - @shots).empty?
-    @state = :game_over if fleet_detroyed?
+    case
+    when fleet_detroyed?
+      game_over!
+    when (ship.location - @shots).empty?
+      @grid_opponent.status_line = "You sank my #{ship.type}!"
+    else
+      @grid_opponent.status_line = 'HIT!'
+    end
   end
 
   def fleet_detroyed?
     @hits_counter.zero?
   end
 
-  def convert
-    return unless @command_line
-    x = @command_line[0]
-    y = @command_line[1..-1]
+  def convert(format_a1)
+    return unless format_a1
+    x = format_a1[0]
+    y = format_a1[1..-1]
     [x.ord - 65, y.to_i - 1]
   end
 
-  def clear_error
+  def ready!
     @state = :ready
+    @grid_opponent.status_line = @state.to_s
   end
 
-  def report
-    msg = if terminated?
-            "Terminated by user after #{@shots.size} shots!"
-          elsif game_over?
-            "Well done! You completed the game in #{@shots.size} shots"
-          end
-    Grid.row(msg)
-    msg
+  def initialize!
+    @state = :initialized
+    @grid_opponent.status_line = 'Initialized'
+  end
+
+  def terminate!
+    @state = :terminated
+    @grid_opponent.status_line =
+      "Terminated by user after #{@shots.size} shots!"
+    show
+  end
+
+  def game_over!
+    @state = :game_over
+    @grid_opponent.status_line =
+      "Well done! You completed the game in #{@shots.size} shots"
+    show
   end
 end

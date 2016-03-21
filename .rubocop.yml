@@ -8,3 +8,5 @@ Metrics/ClassLength:
   Enabled: false
 Metrics/LineLength:
   Enabled: false
+Lint/AssignmentInCondition:
+  Enabled: false
