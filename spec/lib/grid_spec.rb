@@ -61,9 +61,4 @@ describe Grid do
     grid.instance_variable_set('@fleet', fleet)
     expect(grid.send(:setup_with_fleet)[0][2]).to eql('X')
   end
-
-  it '#print_header' do
-    expect(Grid).to receive(:row).exactly(3).times
-    grid.send(:print_header)
-  end
 end

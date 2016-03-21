@@ -68,10 +68,4 @@ class Grid
     end
     @matrix
   end
-
-  def print_header
-    Grid.row(?= * AXE_DIGITS.size * 3)
-    Grid.row status_line
-    Grid.row("  #{AXE_DIGITS.join(' ')}")
-  end
 end
