@@ -10,7 +10,7 @@ class Ship
   end
 
   def build
-    begin
+    loop do
       ship_length = @xsize
       mask = Array.new
 
@@ -34,7 +34,9 @@ class Ship
         mask = neighberhood
         ship_length -= 1
       end
-    end until ship_length.zero?
+
+      break if ship_length.zero?
+    end
     self
   end
 
