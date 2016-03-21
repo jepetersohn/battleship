@@ -14,19 +14,51 @@ class Grid
     @fleet = fleet
   end
 
-  def show
-    print_header
+  def show(inputs)
+    (system('clear') || system('cls')) unless ENV['RACK_ENV'] == 'test'
+    welcome
+    status
+    board
+    history(inputs)
+  end
+
+  def debug
+    Grid.row 'DEBUG MODE'
     setup_with_fleet if @fleet
-    @matrix.each_with_index { |grow, index| Grid.row("#{AXE_LETTERS[index]} #{grow.join(' ')}") }
+    board
   end
 
   # separate presentation layer
-
-  def self.row(txt)
-    puts txt if txt
+  def self.row(txt = nil)
+    txt ? puts(txt) : puts('')
   end
 
   private
+
+  def welcome
+    Grid.row
+    Grid.row '>> Welcome to Battleship'
+    Grid.row
+  end
+
+  def status
+    Grid.row status_line
+    Grid.row
+  end
+
+  def board
+    Grid.row '    ' + AXE_DIGITS.join(' ')
+    @matrix.each_with_index do |grow, index|
+      Grid.row(" #{AXE_LETTERS[index]}  #{grow.join(' ')}  #{AXE_LETTERS[index]}")
+    end
+    Grid.row '    ' + AXE_DIGITS.join(' ')
+  end
+
+  def history(inputs)
+    Grid.row
+    Grid.row inputs[0..-1].join(' ')
+    Grid.row
+  end
 
   def setup_with_fleet
     if @fleet

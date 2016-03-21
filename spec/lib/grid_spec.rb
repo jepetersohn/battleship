@@ -6,7 +6,7 @@ require 'ship'
 describe Grid do
   let(:grid) { Grid.new([]) }
 
-  before(:each) { allow(Grid).to receive(:row) }
+  before(:each) { allow(Grid).to receive(:puts) }
 
   it { respond_to described_class::HIT_CHAR }
   it { respond_to described_class::MISS_CHAR }
@@ -34,8 +34,19 @@ describe Grid do
     expect(grid).to respond_to(:show)
   end
 
-  it 'has row class method' do
-    expect(described_class).to respond_to(:row)
+  describe '#row' do
+    it 'is class method' do
+      expect(described_class).to respond_to(:row)
+    end
+
+    it 'returns nil' do
+      expect(described_class.row('foo')).to eql nil
+    end
+
+    it 'calls puts' do
+      expect(described_class).to receive('puts')
+      described_class.row
+    end
   end
 
   it '#setup_with_fleet' do
