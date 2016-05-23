@@ -8,24 +8,27 @@ class Grid
   HIT_CHAR = 'X'.freeze
   MISS_CHAR = '-'.freeze
   NO_SHOT_CHAR = '·'.freeze
+  HISTORY_LENGTH = 8
 
-  def initialize(matrix, fleet = nil)
+  def initialize(matrix, inputs, fleet = nil)
     @matrix = matrix
+    @inputs = inputs
     @fleet = fleet
   end
 
-  def show(inputs)
+  def show
     (system('clear') || system('cls')) unless ENV['RACK_ENV'] == 'test'
     welcome
     status
     board
-    history(inputs)
+    history
   end
 
   def debug
     Grid.row 'DEBUG MODE'
     setup_with_fleet if @fleet
     board
+    Grid.row
   end
 
   # separate presentation layer
@@ -54,10 +57,19 @@ class Grid
     Grid.row '    ' + AXE_DIGITS.join(' ')
   end
 
-  def history(inputs)
+  def history
     Grid.row
-    Grid.row inputs[0..-1].join(' ')
+    Grid.row input_tail.join(' ')
     Grid.row
+  end
+
+  def input_tail
+    if @inputs.length > HISTORY_LENGTH
+      trimed_input = ['..']
+      trimed_input.push(*@inputs[(@inputs.length - HISTORY_LENGTH)..-1])
+    else
+      @inputs
+    end
   end
 
   def setup_with_fleet

@@ -7,12 +7,12 @@ describe Game do
   before(:each) { allow(Grid).to receive(:row) }
 
   it 'has array of ships' do
-    expect(Game::SHIPS_DEFS).to be_kind_of(Array)
-    expect(Game::SHIPS_DEFS).to_not be_empty
+    expect(described_class::SHIPS_DEFS).to be_a Array
+    expect(described_class::SHIPS_DEFS).to_not be_empty
   end
 
   it 'has array of states' do
-    expect(Game::STATES).to be_kind_of(Array)
+    expect(described_class::STATES).to be_a(Array)
   end
 
   describe '#initialize' do
@@ -145,7 +145,7 @@ describe Game do
         it "setups grids's status_line" do
           expect { game.play }.to change {
             game.instance_variable_get('@grid_opponent')
-              .instance_variable_get('@status_line')
+                .instance_variable_get('@status_line')
           }.to('Initialized')
         end
 
@@ -186,7 +186,7 @@ describe Game do
         game.instance_variable_set('@debug', true)
         expect { game.show }.to change {
           game.instance_variable_get('@grid')
-            .instance_variable_get('@status_line')
+              .instance_variable_get('@status_line')
         }.from(nil).to('DEBUG MODE')
       end
     end

@@ -28,7 +28,7 @@ class Game
     loop do
       @matrix = Array.new(Grid::SIZE) { Array.new(Grid::SIZE, ' ') }
       @matrix_opponent = Array.new(Grid::SIZE) { Array.new(Grid::SIZE, Grid::NO_SHOT_CHAR) }
-      @grid_opponent = Grid.new @matrix_opponent
+      @grid_opponent = Grid.new(@matrix_opponent, @inputs)
       @hits_counter = 0
       @debug = false
       create_fleet! && control_loop
@@ -54,10 +54,10 @@ class Game
   end
 
   def show
-    @grid_opponent.show(@inputs)
+    @grid_opponent.show
 
     if @debug
-      @grid = Grid.new(@matrix, @fleet)
+      @grid = Grid.new(@matrix, @inputs, @fleet)
       @grid.status_line = 'DEBUG MODE'
       @grid.debug
     end
@@ -109,10 +109,9 @@ class Game
 
   def hit(ship)
     @hits_counter -= 1
-    case
-    when fleet_detroyed?
+    if fleet_detroyed?
       game_over!
-    when (ship.location - @shots).empty?
+    elsif (ship.location - @shots).empty?
       @grid_opponent.status_line = "You sank my #{ship.type}!"
     else
       @grid_opponent.status_line = 'HIT!'
